@@ -6,10 +6,10 @@ import Layout from "../components/Layout";
 
 export default function Home() {
   return (
-    <body>
+    <>
       <Layout>
         <ColorCard />
       </Layout>
-    </body>
+    </>
   );
 }
