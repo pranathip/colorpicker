@@ -1,4 +1,3 @@
-import ColorCard from "./Card";
 import { Container, Flex } from "@chakra-ui/react";
 
 export const Layout = ({ children }: { children: any }) => {
