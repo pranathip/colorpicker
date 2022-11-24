@@ -10,6 +10,7 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { Sun } from "./Svg";
+import { CopyIcon } from "@chakra-ui/icons";
 
 export const ColorCard = () => {
   return (
@@ -42,7 +43,13 @@ export const ColorCard = () => {
         Hex
       </Heading>
       <ButtonGroup my={3} mx={5} spacing="3">
-        <Button variant="outline" colorScheme="gray" p={3} size="sm">
+        <Button
+          variant="outline"
+          colorScheme="gray"
+          p={3}
+          size="sm"
+          rightIcon={<CopyIcon />}
+        >
           #000000
         </Button>
         <Button variant="outline" colorScheme="gray" p={3} size="sm">
