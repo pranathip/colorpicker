@@ -3,23 +3,31 @@ import {
   ButtonGroup,
   Card,
   CardHeader,
-  CardBody,
-  CardFooter,
   Heading,
-  IconButton,
   Box,
   Slider,
   SliderTrack,
-  SliderFilledTrack,
   SliderThumb,
+  useColorMode,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { Sun } from "./Svg";
 import { CopyIcon } from "@chakra-ui/icons";
 import React, { useState, useEffect } from "react";
+import { DarkModeSwitch } from "react-toggle-dark-mode";
 
 export const ColorCard = () => {
   var rgb = { r: 255, g: 0, b: 0 };
   const [hexCode, setHexCode] = useState("#ff0000");
+  const [rgbCode, setRgbCode] = useState("RGB(255, 0, 0)");
+  const [isDarkMode, setDarkMode] = useState(false);
+  const { colorMode, toggleColorMode } = useColorMode();
+  const cardBg = useColorModeValue("white", "#000A1E");
+
+  const toggleDarkMode = () => {
+    setDarkMode((isDarkMode) => !isDarkMode);
+    toggleColorMode();
+  };
 
   function componentToHex(c: number) {
     var hex = c.toString(16);
@@ -63,23 +71,26 @@ export const ColorCard = () => {
       }
     }
     setHexCode(rgbToHex(rgb.r, rgb.g, rgb.b));
+    setRgbCode(`RGB(${rgb.r}, ${rgb.g}, ${rgb.b})`);
   }
+
   useEffect(() => {
     const hexButton = document.getElementById("hexButton");
+    const rgbButton = document.getElementById("rgbButton");
     const colorWindow = document.getElementById("colorWindow");
     hexButton?.setAttribute("textContent", hexCode);
+    rgbButton?.setAttribute("textContent", rgbCode);
     colorWindow?.setAttribute("bg", hexCode);
   });
 
   return (
-    <Card>
+    <Card id="mainCard" bg={cardBg}>
       <CardHeader>
-        <IconButton
-          aria-label="Light mode"
-          colorScheme="clear"
-          size="xxs"
-          mb={3}
-          icon={<Sun />}
+        <DarkModeSwitch
+          style={{ marginBottom: "2rem" }}
+          checked={isDarkMode}
+          onChange={toggleDarkMode}
+          size={20}
         />
         <Heading size="sm">Color Picker</Heading>
       </CardHeader>
@@ -113,29 +124,6 @@ export const ColorCard = () => {
           boxShadow="2px 2px 5px rgba(0, 0, 0, 0.25)"
         />
       </Slider>
-      {/*<Slider
-        aria-label="slider-ex-2"
-        colorScheme="pink"
-        defaultValue={98}
-        mx={5}
-        my={3}
-        width="90%"
-        onChangeEnd={(val) => console.log(val)}
-      >
-        <SliderTrack
-          height="15px"
-          borderRadius="20px"
-          backgroundImage="conic-gradient(white 90deg, lightgray 90deg 180deg, white 180deg 270deg, lightgray 270deg)"
-          backgroundSize="10px 10px"
-        ></SliderTrack>
-        <SliderThumb
-          bg="clear"
-          border="2px"
-          borderColor="white"
-          boxSize={5}
-          boxShadow="2px 2px 5px rgba(0, 0, 0, 0.25)"
-        />
-  </Slider>*/}
       <Heading size="xs" mx={5}>
         Hex
       </Heading>
@@ -150,8 +138,15 @@ export const ColorCard = () => {
         >
           {hexCode}
         </Button>
-        <Button variant="outline" colorScheme="gray" p={3} size="sm">
-          100%
+        <Button
+          variant="outline"
+          colorScheme="gray"
+          p={3}
+          size="sm"
+          rightIcon={<CopyIcon />}
+          id="rgbButton"
+        >
+          {rgbCode}
         </Button>
       </ButtonGroup>
     </Card>
