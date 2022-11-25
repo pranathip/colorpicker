@@ -10,6 +10,7 @@ import {
   SliderThumb,
   useColorMode,
   useColorModeValue,
+  useToast,
 } from "@chakra-ui/react";
 import { Sun } from "./Svg";
 import { CopyIcon } from "@chakra-ui/icons";
@@ -22,7 +23,9 @@ export const ColorCard = () => {
   const [rgbCode, setRgbCode] = useState("RGB(255, 0, 0)");
   const [isDarkMode, setDarkMode] = useState(false);
   const { colorMode, toggleColorMode } = useColorMode();
-  const cardBg = useColorModeValue("white", "#000A1E");
+  const cardBg = useColorModeValue("#FFFFFF", "#000A1E");
+  const toast = useToast();
+  const toastIdRef = React.useRef();
 
   const toggleDarkMode = () => {
     setDarkMode((isDarkMode) => !isDarkMode);
@@ -36,6 +39,14 @@ export const ColorCard = () => {
 
   function rgbToHex(r: number, g: number, b: number) {
     return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+  }
+
+  function copyText(text: string) {
+    navigator.clipboard.writeText(text);
+    toast({
+      title: `${text} was copied`,
+      duration: 1000,
+    });
   }
 
   function calcRgb({ val }: { val: any }) {
@@ -84,7 +95,7 @@ export const ColorCard = () => {
   });
 
   return (
-    <Card id="mainCard" bg={cardBg}>
+    <Card id="mainCard" bg={cardBg} boxShadow="2xl">
       <CardHeader>
         <DarkModeSwitch
           style={{ marginBottom: "2rem" }}
@@ -135,6 +146,7 @@ export const ColorCard = () => {
           size="sm"
           rightIcon={<CopyIcon />}
           id="hexButton"
+          onClick={() => copyText(hexCode)}
         >
           {hexCode}
         </Button>
@@ -145,6 +157,7 @@ export const ColorCard = () => {
           size="sm"
           rightIcon={<CopyIcon />}
           id="rgbButton"
+          onClick={() => copyText(rgbCode)}
         >
           {rgbCode}
         </Button>
